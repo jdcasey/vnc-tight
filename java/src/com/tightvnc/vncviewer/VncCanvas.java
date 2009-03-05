@@ -942,7 +942,7 @@ class VncCanvas extends Canvas
 	rfb.skipBytes(6 + bytesMaskData * 2);
       } else {
 	// rfb.EncodingRichCursor
-	rfb.skipBytes(width * height + bytesMaskData);
+	rfb.skipBytes(width * height * bytesPixel + bytesMaskData);
       }
       return;
     }
