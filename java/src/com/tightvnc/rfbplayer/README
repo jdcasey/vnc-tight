@@ -1,6 +1,6 @@
 
-RFB Session Player 1.0.1
-========================
+RFB Session Player 1.4.0.1
+==========================
 
 RFB Session Player is a Java application/applet for playing back RFB session
 files in FBS format saved by such programs as VNC Reflector or rfbproxy.
@@ -82,6 +82,7 @@ Licensing Terms
 
 RFB Session Player is
 
+  Copyright (C) 2008 Wimba.com, Inc.  All Rights Reserved.
   Copyright (C) 2002 HorizonLive.com, Inc.  All Rights Reserved.
 
 This software is based on the TightVNC Java viewer which is
