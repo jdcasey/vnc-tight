@@ -49,6 +49,7 @@ namespace rfb {
 
     // Read TightVNC-specific protocol messages.
     virtual void readVideoRectangleSelection();
+    virtual void readVideoFreeze();
 
     SMsgReader(SMsgHandler* handler, rdr::InStream* is);
 

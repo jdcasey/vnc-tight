@@ -121,3 +121,14 @@ void SMsgReader::readVideoRectangleSelection()
   handler->setVideoRectangle(rect);
 }
 
+void SMsgReader::readVideoFreeze()
+{
+  int param = is->readU8();
+  vlog.debug("Video freeze: %d", param);
+
+  bool freeze = (param != 0);
+
+  /* FIXME: Implement this.
+  handler->freezeVideo(freeze);
+  */
+}

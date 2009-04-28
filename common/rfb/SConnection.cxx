@@ -468,6 +468,7 @@ void SConnection::sendInteractionCaps()
   if (m_videoSelectionEnabled) {
     ccaps.addTightExt(msgTypeVideoRectangleSelection, "VRECTSEL");
   }
+  ccaps.addTightExt(msgTypeVideoFreeze, "VD_FREEZ");
 
   //
   // Advertise all supported encoding types (except raw encoding).

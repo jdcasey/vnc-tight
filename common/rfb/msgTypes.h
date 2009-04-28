@@ -58,5 +58,6 @@ namespace rfb {
 
   const int msgTypeEnableContinuousUpdates = 150;
   const int msgTypeVideoRectangleSelection = 151;
+  const int msgTypeVideoFreeze = 152;
 }
 #endif
