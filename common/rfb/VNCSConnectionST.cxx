@@ -586,12 +586,7 @@ void VNCSConnectionST::writeFramebufferUpdate()
 
   updates.enable_copyrect(cp.useCopyRect);
 
-  if (--m_updateTypeCounter > 0) {
-    server->checkVideoUpdate();
-  } else {
-    m_updateTypeCounter = rfb::Server::videoPriority;
-    server->checkUpdate();
-  }
+  server->checkUpdate();
 
   // If VideoPriority is 0, convert video updates to normal updates.
 
@@ -672,28 +667,45 @@ void VNCSConnectionST::writeFramebufferUpdate()
   }
 
   if (!ui.is_empty() || writer()->needFakeUpdate() || drawRenderedCursor) {
-    // Compute the number of rectangles. Tight encoder makes the things more
-    // complicated as compared to the original VNC4.
+
+    // Make sure current encoder is configured properly.
     writer()->setupCurrentEncoder();
-    int nRects = (ui.copied.numRects() +
-                  (drawRenderedCursor ? 1 : 0));
+
+    // First, compute the number of video rectangles.
+    int nRects = 0;
     if (!ui.video_area.is_empty()) {
       if (writer()->canUseJpegEncoder(server->getPixelBuffer())) {
-        nRects++;
+        nRects = 1;
       } else {
-        nRects += writer()->getNumRects(ui.video_area);
+        nRects = writer()->getNumRects(ui.video_area);
+      }
+    }
+    // Will we send something besides video?
+    bool sendVideoOnly = false;
+    if (nRects > 0) {
+      if (--m_updateTypeCounter > 0) {
+        sendVideoOnly = true;
+      } else {
+        m_updateTypeCounter = rfb::Server::videoPriority;
       }
     }
 
-    std::vector<Rect> rects;
-    std::vector<Rect>::const_iterator i;
-    ui.changed.get_rects(&rects);
-    for (i = rects.begin(); i != rects.end(); i++) {
-      if (i->width() && i->height())
-        nRects += writer()->getNumRects(*i);
+    if (!sendVideoOnly) {
+      // Compute the number of non-video rectangles. Tight encoder makes
+      // the things more complicated as compared to the original VNC4.
+      nRects += (ui.copied.numRects() + (drawRenderedCursor ? 1 : 0));
+
+      std::vector<Rect> rects;
+      std::vector<Rect>::const_iterator i;
+      ui.changed.get_rects(&rects);
+      for (i = rects.begin(); i != rects.end(); i++) {
+        if (i->width() && i->height())
+          nRects += writer()->getNumRects(*i);
+      }
     }
     
     writer()->writeFramebufferUpdateStart(nRects);
+
     if (!ui.video_area.is_empty()) {
       if (writer()->canUseJpegEncoder(server->getPixelBuffer())) {
         writer()->writeJpegRect(server->getPixelBuffer(), ui.video_area);
@@ -702,11 +714,15 @@ void VNCSConnectionST::writeFramebufferUpdate()
         writer()->writeRect(ui.video_area, &image_getter, &actual);
       }
     }
-    Region updatedRegion;
-    writer()->writeRects(ui, &image_getter, &updatedRegion);
-    updates.subtract(updatedRegion);
-    if (drawRenderedCursor)
-      writeRenderedCursorRect();
+
+    if (!sendVideoOnly) {
+      Region updatedRegion;
+      writer()->writeRects(ui, &image_getter, &updatedRegion);
+      updates.subtract(updatedRegion);
+      if (drawRenderedCursor)
+        writeRenderedCursorRect();
+    }
+
     writer()->writeFramebufferUpdateEnd();
     requested.clear();
   }
