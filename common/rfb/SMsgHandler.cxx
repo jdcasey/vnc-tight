@@ -54,3 +54,7 @@ void SMsgHandler::supportsLocalCursor()
 void SMsgHandler::setVideoRectangle(const Rect& r)
 {
 }
+
+void SMsgHandler::freezeVideo(bool freeze)
+{
+}

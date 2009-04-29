@@ -36,7 +36,7 @@ VNCSConnectionST::VNCSConnectionST(VNCServerST* server_, network::Socket *s,
     updates(false), image_getter(server->useEconomicTranslate),
     drawRenderedCursor(false), removeRenderedCursor(false),
     pointerEventTime(0), accessRights(AccessDefault),
-    startTime(time(0)), m_pFileTransfer(0)
+    startTime(time(0)), m_videoFrozen(false), m_pFileTransfer(0)
 {
   setStreams(&sock->inStream(), &sock->outStream());
   peerEndpoint.buf = sock->getPeerEndpoint();
@@ -511,6 +511,18 @@ void VNCSConnectionST::framebufferUpdateRequest(const Rect& r,bool incremental)
 void VNCSConnectionST::setVideoRectangle(const Rect& r)
 {
   server->setVideoRectangle(r);
+}
+
+void VNCSConnectionST::freezeVideo(bool freeze)
+{
+  if (freeze != m_videoFrozen) {
+    m_videoFrozen = freeze;
+    if (freeze) {
+      vlog.debug("Freezing video updates");
+    } else {
+      vlog.debug("Enabling video updates");
+    }
+  }
 }
 
 void VNCSConnectionST::setInitialColourMap()

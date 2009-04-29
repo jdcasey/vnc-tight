@@ -127,8 +127,5 @@ void SMsgReader::readVideoFreeze()
   vlog.debug("Video freeze: %d", param);
 
   bool freeze = (param != 0);
-
-  /* FIXME: Implement this.
   handler->freezeVideo(freeze);
-  */
 }

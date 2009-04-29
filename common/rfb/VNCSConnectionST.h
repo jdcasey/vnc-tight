@@ -132,6 +132,7 @@ namespace rfb {
     virtual void supportsLocalCursor();
 
     virtual void setVideoRectangle(const Rect& r);
+    virtual void freezeVideo(bool freeze);
 
     // setAccessRights() allows a security package to limit the access rights
     // of a VNCSConnectioST to the server.  These access rights are applied
@@ -173,6 +174,8 @@ namespace rfb {
 
     CharArray closeReason;
     time_t startTime;
+
+    bool m_videoFrozen;
 
     SFileTransfer *m_pFileTransfer;
   };
