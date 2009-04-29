@@ -671,9 +671,12 @@ void VNCSConnectionST::writeFramebufferUpdate()
     // Make sure current encoder is configured properly.
     writer()->setupCurrentEncoder();
 
+    // Is there some video to send?
+    bool willSendVideo = (!ui.video_area.is_empty() && !m_videoFrozen);
+
     // First, compute the number of video rectangles.
     int nRects = 0;
-    if (!ui.video_area.is_empty()) {
+    if (willSendVideo) {
       if (writer()->canUseJpegEncoder(server->getPixelBuffer())) {
         nRects = 1;
       } else {
@@ -706,7 +709,7 @@ void VNCSConnectionST::writeFramebufferUpdate()
     
     writer()->writeFramebufferUpdateStart(nRects);
 
-    if (!ui.video_area.is_empty()) {
+    if (willSendVideo) {
       if (writer()->canUseJpegEncoder(server->getPixelBuffer())) {
         writer()->writeJpegRect(server->getPixelBuffer(), ui.video_area);
       } else {
