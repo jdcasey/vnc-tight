@@ -36,7 +36,8 @@ VNCSConnectionST::VNCSConnectionST(VNCServerST* server_, network::Socket *s,
     updates(false), image_getter(server->useEconomicTranslate),
     drawRenderedCursor(false), removeRenderedCursor(false),
     pointerEventTime(0), accessRights(AccessDefault),
-    startTime(time(0)), m_videoFrozen(false), m_pFileTransfer(0)
+    startTime(time(0)), m_videoFrozen(false), m_updateTypeCounter(1),
+    m_pFileTransfer(0)
 {
   setStreams(&sock->inStream(), &sock->outStream());
   peerEndpoint.buf = sock->getPeerEndpoint();
@@ -585,11 +586,10 @@ void VNCSConnectionST::writeFramebufferUpdate()
 
   updates.enable_copyrect(cp.useCopyRect);
 
-  static int counter = 1;
-  if (--counter > 0) {
+  if (--m_updateTypeCounter > 0) {
     server->checkVideoUpdate();
   } else {
-    counter = rfb::Server::videoPriority;
+    m_updateTypeCounter = rfb::Server::videoPriority;
     server->checkUpdate();
   }
 

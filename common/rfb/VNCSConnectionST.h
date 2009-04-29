@@ -175,6 +175,14 @@ namespace rfb {
     CharArray closeReason;
     time_t startTime;
 
+    // This counter determines if we should send a video-only update
+    // or a normal update (both non-video and video). Initially, this
+    // counter is set to 1, and will be decreased before sending each
+    // update. When it becomes 0, a normal update is sent and the
+    // counter is set the the VideoPriority parameter's value. When
+    // it's not 0 after the decrement, a video-only update is sent.
+    int m_updateTypeCounter;
+
     bool m_videoFrozen;
 
     SFileTransfer *m_pFileTransfer;
