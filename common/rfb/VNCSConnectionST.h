@@ -185,6 +185,9 @@ namespace rfb {
     // it's not 0 after the decrement, a video-only update is sent.
     int m_updateTypeCounter;
 
+    // Was there a non-incremental update request recently?
+    bool m_fullUpdateRequested;
+
     SFileTransfer *m_pFileTransfer;
   };
 }

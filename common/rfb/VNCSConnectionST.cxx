@@ -37,6 +37,7 @@ VNCSConnectionST::VNCSConnectionST(VNCServerST* server_, network::Socket *s,
     drawRenderedCursor(false), removeRenderedCursor(false),
     pointerEventTime(0), accessRights(AccessDefault),
     startTime(time(0)), m_videoFrozen(false), m_updateTypeCounter(1),
+    m_fullUpdateRequested(false),
     m_pFileTransfer(0)
 {
   setStreams(&sock->inStream(), &sock->outStream());
@@ -506,6 +507,8 @@ void VNCSConnectionST::framebufferUpdateRequest(const Rect& r,bool incremental)
     // Non-incremental update - treat as if area requested has changed
     updates.add_changed(reqRgn);
     server->comparer->add_changed(reqRgn);
+    // Also, remember the fact that there was a non-incremental update.
+    m_fullUpdateRequested = true;
   }
 }
 
@@ -672,7 +675,8 @@ void VNCSConnectionST::writeFramebufferUpdate()
     writer()->setupCurrentEncoder();
 
     // Is there some video to send?
-    bool willSendVideo = (!ui.video_area.is_empty() && !m_videoFrozen);
+    bool maySendVideo = (!m_videoFrozen || m_fullUpdateRequested);
+    bool willSendVideo = (maySendVideo && !ui.video_area.is_empty());
 
     // First, compute the number of video rectangles.
     int nRects = 0;
@@ -685,8 +689,8 @@ void VNCSConnectionST::writeFramebufferUpdate()
     }
     // Will we send something besides video?
     bool sendVideoOnly = false;
-    if (nRects > 0) {
-      if (--m_updateTypeCounter > 0) {
+    if (willSendVideo) {
+      if (--m_updateTypeCounter > 0 && !m_fullUpdateRequested) {
         sendVideoOnly = true;
       } else {
         m_updateTypeCounter = rfb::Server::videoPriority;
@@ -728,6 +732,7 @@ void VNCSConnectionST::writeFramebufferUpdate()
 
     writer()->writeFramebufferUpdateEnd();
     requested.clear();
+    m_fullUpdateRequested = false;
   }
 }
 
