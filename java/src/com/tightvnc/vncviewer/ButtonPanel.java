@@ -41,10 +41,10 @@ class ButtonPanel extends Panel implements ActionListener {
   Button selectButton;
   Button videoFreezeButton;
 
-  final String enableVideoFreezeLabel = "Ignore Video";
-  final String disableVideoFreezeLabel = "Enable Video";
   final String selectEnterLabel = "Select Video Area";
   final String selectLeaveLabel = "Hide Selection";
+  final String enableVideoFreezeLabel = "Ignore Video";
+  final String disableVideoFreezeLabel = "Enable Video";
 
   ButtonPanel(VncViewer v) {
     viewer = v;
