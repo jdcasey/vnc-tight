@@ -97,6 +97,8 @@ class RfbProto {
     PointerEvent             = 5,
     ClientCutText            = 6;
 
+  final static int PREFIX_TIGHT = 0xFC;
+
   // Non-standard client-to-server messages
   final static int EnableContinuousUpdates = 150;
   final static int VideoRectangleSelection = 151;
@@ -722,6 +724,12 @@ class RfbProto {
 
   int readServerMessageType() throws IOException {
     int msgType = readU8();
+    if (protocolTightVNC && msgType == PREFIX_TIGHT) {
+      byte[] buf = new byte[3];
+      readFully(buf);
+      msgType = (int)((long)PREFIX_TIGHT << 24 |
+                      (long)buf[0] << 16 | (long)buf[1] << 8 | (long)buf[2]);
+    }
 
     // If the session is being recorded:
     if (rec != null) {
