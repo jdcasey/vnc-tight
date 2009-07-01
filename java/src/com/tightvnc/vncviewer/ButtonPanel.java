@@ -38,13 +38,16 @@ class ButtonPanel extends Panel implements ActionListener {
   Button clipboardButton;
   Button ctrlAltDelButton;
   Button refreshButton;
-  Button selectButton;
   Button videoFreezeButton;
+  Button selectButton;
+  Button enableVideoButton;
 
+  final String videoOffLabel = "Video Off";
+  final String videoOnLabel = "Video On";
   final String selectEnterLabel = "Select Video Area";
   final String selectLeaveLabel = "Hide Selection";
-  final String enableVideoFreezeLabel = "Ignore Video";
-  final String disableVideoFreezeLabel = "Enable Video";
+  final String enableVideoFreezeLabel = " Freeze Video  ";
+  final String disableVideoFreezeLabel = "Unfreeze Video";
 
   ButtonPanel(VncViewer v) {
     viewer = v;
@@ -77,6 +80,16 @@ class ButtonPanel extends Panel implements ActionListener {
   }
 
   /**
+   * Add video on/off button to the ButtonPanel.
+   */
+  public void addVideoOffButton() {
+    enableVideoButton = new Button(videoOffLabel);
+    enableVideoButton.setEnabled(false);
+    add(enableVideoButton);
+    enableVideoButton.addActionListener(this);
+  }
+
+  /**
    * Add video selection button to the ButtonPanel.
    */
   public void addSelectButton() {
@@ -105,6 +118,9 @@ class ButtonPanel extends Panel implements ActionListener {
     refreshButton.setEnabled(true);
     if (selectButton != null) {
       selectButton.setEnabled(true);
+    }
+    if (enableVideoButton != null) {
+      enableVideoButton.setEnabled(true);
     }
   }
 
@@ -215,6 +231,14 @@ class ButtonPanel extends Panel implements ActionListener {
           selectButton.setLabel(selectEnterLabel);
           viewer.vc.enableSelection(false);
         }
+      }
+    } else if (enableVideoButton != null && evt.getSource() == enableVideoButton) {
+      boolean enable = enableVideoButton.getLabel().equals(videoOnLabel);
+      try {
+	viewer.rfb.trySendVideoEnable(enable);
+        enableVideoButton.setLabel(enable ? videoOffLabel : videoOnLabel);
+      } catch (IOException e) {
+        e.printStackTrace();
       }
     }
   }

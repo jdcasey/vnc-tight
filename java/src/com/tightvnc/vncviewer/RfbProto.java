@@ -103,9 +103,11 @@ class RfbProto {
   final static int EnableContinuousUpdates = 150;
   final static int VideoRectangleSelection = 151;
   final static int VideoFreeze = 152;
+  final static int EnableVideoHandling = 153;
   final static String SigVideoFreeze = "VD_FREEZ";
   final static String SigEnableContinuousUpdates = "CUC_ENCU";
   final static String SigVideoRectangleSelection = "VRECTSEL";
+  final static String SigEnableVideoHandling = "VD_ENABL";
 
   // Supported encodings and pseudo-encodings
   final static int
@@ -505,6 +507,9 @@ class RfbProto {
     clientMsgCaps.add(VideoFreeze, TightVncVendor,
                       SigVideoFreeze,
                       "Disable/enable video rectangle");
+    clientMsgCaps.add(EnableVideoHandling, TightVncVendor,
+                      SigEnableVideoHandling,
+                      "Disable/enable special video handling");
 
     // Supported encoding types
     encodingCaps.add(EncodingCopyRect, StandardVendor,
@@ -1411,6 +1416,23 @@ class RfbProto {
     os.write(b);
 
     System.out.println("Video freeze selection message sent");
+  }
+
+  void trySendVideoEnable(boolean enable) throws IOException
+  {
+    if (!clientMsgCaps.isEnabled(EnableVideoHandling)) {
+      System.out.println("EnableVideoHandling is not supported by the server");
+      return;
+    }
+
+    byte[] b = new byte[2];
+
+    b[0] = (byte)EnableVideoHandling;
+    b[1] = (byte)(enable ? 1 : 0);
+
+    os.write(b);
+
+    System.out.println("EnableVideoHandling(" + b[1] + ") message sent");
   }
 
   public void startTiming() {

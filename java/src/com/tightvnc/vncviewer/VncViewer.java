@@ -163,6 +163,11 @@ public class VncViewer extends java.applet.Applet
       doProtocolInitialisation();
 
       if (showControls &&
+          rfb.clientMsgCaps.isEnabled(RfbProto.EnableVideoHandling)) {
+        buttonPanel.addVideoOffButton();
+      }
+
+      if (showControls &&
           rfb.clientMsgCaps.isEnabled(RfbProto.VideoRectangleSelection)) {
         buttonPanel.addSelectButton();
       }
