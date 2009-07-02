@@ -38,9 +38,9 @@ class ButtonPanel extends Panel implements ActionListener {
   Button clipboardButton;
   Button ctrlAltDelButton;
   Button refreshButton;
-  Button videoFreezeButton;
-  Button selectButton;
   Button enableVideoButton;
+  Button selectButton;
+  Button videoFreezeButton;
 
   final String videoOffLabel = "Video Off";
   final String videoOnLabel = "Video On";
@@ -116,11 +116,11 @@ class ButtonPanel extends Panel implements ActionListener {
     disconnectButton.setEnabled(true);
     clipboardButton.setEnabled(true);
     refreshButton.setEnabled(true);
-    if (selectButton != null) {
-      selectButton.setEnabled(true);
-    }
     if (enableVideoButton != null) {
       enableVideoButton.setEnabled(true);
+    }
+    if (selectButton != null) {
+      selectButton.setEnabled(true);
     }
   }
 
@@ -221,6 +221,14 @@ class ButtonPanel extends Panel implements ActionListener {
       } catch (IOException e) {
         e.printStackTrace();
       }
+    } else if (enableVideoButton != null && evt.getSource() == enableVideoButton) {
+      boolean enable = enableVideoButton.getLabel().equals(videoOnLabel);
+      try {
+        viewer.rfb.trySendVideoEnable(enable);
+        enableVideoButton.setLabel(enable ? videoOffLabel : videoOnLabel);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     } else if (selectButton != null && evt.getSource() == selectButton) {
       if (viewer.vc != null) {
         boolean isSelecting = viewer.vc.isInSelectionMode();
@@ -231,14 +239,6 @@ class ButtonPanel extends Panel implements ActionListener {
           selectButton.setLabel(selectEnterLabel);
           viewer.vc.enableSelection(false);
         }
-      }
-    } else if (enableVideoButton != null && evt.getSource() == enableVideoButton) {
-      boolean enable = enableVideoButton.getLabel().equals(videoOnLabel);
-      try {
-	viewer.rfb.trySendVideoEnable(enable);
-        enableVideoButton.setLabel(enable ? videoOffLabel : videoOnLabel);
-      } catch (IOException e) {
-        e.printStackTrace();
       }
     }
   }

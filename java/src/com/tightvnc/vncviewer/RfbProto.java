@@ -100,13 +100,17 @@ class RfbProto {
   final static int PREFIX_TIGHT = 0xFC;
 
   // Non-standard client-to-server messages
+
   final static int EnableContinuousUpdates = 150;
-  final static int VideoRectangleSelection = 151;
-  final static int VideoFreeze = 152;
-  final static int EnableVideoHandling = 153;
-  final static String SigVideoFreeze = "VD_FREEZ";
   final static String SigEnableContinuousUpdates = "CUC_ENCU";
+
+  final static int VideoRectangleSelection = 151;
   final static String SigVideoRectangleSelection = "VRECTSEL";
+
+  final static int VideoFreeze = 152;
+  final static String SigVideoFreeze = "VD_FREEZ";
+
+  final static int EnableVideoHandling = 153;
   final static String SigEnableVideoHandling = "VD_ENABL";
 
   // Supported encodings and pseudo-encodings
