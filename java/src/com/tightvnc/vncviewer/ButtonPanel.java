@@ -46,8 +46,8 @@ class ButtonPanel extends Panel implements ActionListener {
   final String videoOnLabel = "Video On";
   final String selectEnterLabel = "Select Video Area";
   final String selectLeaveLabel = "Hide Selection";
-  final String enableVideoFreezeLabel = " Freeze Video  ";
-  final String disableVideoFreezeLabel = "Unfreeze Video";
+  final String videoFreezeLabel = " Freeze Video  ";
+  final String videoUnfreezeLabel = "Unfreeze Video";
 
   ButtonPanel(VncViewer v) {
     viewer = v;
@@ -103,7 +103,8 @@ class ButtonPanel extends Panel implements ActionListener {
    * Add video ignore button to the ButtonPanel.
    */
   public void addVideoFreezeButton() {
-    videoFreezeButton = new Button(enableVideoFreezeLabel);
+    videoFreezeButton = new Button(videoFreezeLabel);
+    videoFreezeButton.setEnabled(false);
     add(videoFreezeButton);
     videoFreezeButton.addActionListener(this);
   }
@@ -121,6 +122,9 @@ class ButtonPanel extends Panel implements ActionListener {
     }
     if (selectButton != null) {
       selectButton.setEnabled(true);
+    }
+    if (videoFreezeButton != null) {
+      videoFreezeButton.setEnabled(true);
     }
   }
 
@@ -144,6 +148,9 @@ class ButtonPanel extends Panel implements ActionListener {
     }
     if (selectButton != null) {
       selectButton.setEnabled(false);
+    }
+    if (videoFreezeButton != null) {
+      videoFreezeButton.setEnabled(false);
     }
   }
 
@@ -175,32 +182,7 @@ class ButtonPanel extends Panel implements ActionListener {
 
     } else if (evt.getSource() == clipboardButton) {
       viewer.clipboard.setVisible(!viewer.clipboard.isVisible());
-    } else if (evt.getSource() == videoFreezeButton) {
 
-      //
-      // Send video freeze message to server and change caption of button
-      //
-
-      //
-      // TODO: Move this code to another place.
-      //
-
-      boolean sendOk = true;
-      boolean currentFreezeState =
-              videoFreezeButton.getLabel().equals(disableVideoFreezeLabel);
-      try {
-        viewer.rfb.trySendVideoFreeze(!currentFreezeState);
-      } catch (IOException ex) {
-        sendOk = false;
-        ex.printStackTrace();
-      }
-      if (sendOk) {
-        if (!currentFreezeState) {
-            videoFreezeButton.setLabel(disableVideoFreezeLabel);
-        } else {
-            videoFreezeButton.setLabel(enableVideoFreezeLabel);
-        }
-      }
     } else if (evt.getSource() == ctrlAltDelButton) {
       try {
         final int modifiers = InputEvent.CTRL_MASK | InputEvent.ALT_MASK;
@@ -216,6 +198,7 @@ class ButtonPanel extends Panel implements ActionListener {
       } catch (IOException e) {
         e.printStackTrace();
       }
+
     } else if (evt.getSource() == refreshButton) {
       try {
 	RfbProto rfb = viewer.rfb;
@@ -224,6 +207,7 @@ class ButtonPanel extends Panel implements ActionListener {
       } catch (IOException e) {
         e.printStackTrace();
       }
+
     } else if (enableVideoButton != null && evt.getSource() == enableVideoButton) {
       boolean enable = enableVideoButton.getLabel().equals(videoOnLabel);
       try {
@@ -232,6 +216,7 @@ class ButtonPanel extends Panel implements ActionListener {
       } catch (IOException e) {
         e.printStackTrace();
       }
+
     } else if (selectButton != null && evt.getSource() == selectButton) {
       if (viewer.vc != null) {
         boolean isSelecting = viewer.vc.isInSelectionMode();
@@ -243,6 +228,16 @@ class ButtonPanel extends Panel implements ActionListener {
           viewer.vc.enableSelection(false);
         }
       }
+
+    } else if (videoFreezeButton != null && evt.getSource() == videoFreezeButton) {
+      boolean freeze = videoFreezeButton.getLabel().equals(videoFreezeLabel);
+      try {
+        viewer.rfb.trySendVideoFreeze(freeze);
+        videoFreezeButton.setLabel(freeze ? videoUnfreezeLabel : videoFreezeLabel);
+      } catch (IOException ex) {
+        ex.printStackTrace();
+      }
+
     }
   }
 }
