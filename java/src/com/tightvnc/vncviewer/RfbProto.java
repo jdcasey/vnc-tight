@@ -1404,22 +1404,16 @@ class RfbProto {
   void trySendVideoFreeze(boolean freeze) throws IOException
   {
     if (!clientMsgCaps.isEnabled(VideoFreeze)) {
-      System.out.println("Video freeze is not supported by the server");
+      System.out.println("VideoFreeze is not supported by the server");
       return;
     }
 
     byte[] b = new byte[2];
-    byte fb = 0;
-    if (freeze) {
-      fb = 1;
-    }
-
-    b[0] = (byte) VideoFreeze;
-    b[1] = (byte) fb;
-
+    b[0] = (byte)VideoFreeze;
+    b[1] = (byte)(freeze ? 1 : 0);
     os.write(b);
 
-    System.out.println("Video freeze selection message sent");
+    System.out.println("VideoFreeze(" + b[1] + ") selection message sent");
   }
 
   void trySendVideoEnable(boolean enable) throws IOException
@@ -1430,10 +1424,8 @@ class RfbProto {
     }
 
     byte[] b = new byte[2];
-
     b[0] = (byte)EnableVideoHandling;
     b[1] = (byte)(enable ? 1 : 0);
-
     os.write(b);
 
     System.out.println("EnableVideoHandling(" + b[1] + ") message sent");
