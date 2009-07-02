@@ -139,6 +139,9 @@ class ButtonPanel extends Panel implements ActionListener {
     clipboardButton.setEnabled(false);
     ctrlAltDelButton.setEnabled(false);
     refreshButton.setEnabled(false);
+    if (enableVideoButton != null) {
+      enableVideoButton.setEnabled(false);
+    }
     if (selectButton != null) {
       selectButton.setEnabled(false);
     }
