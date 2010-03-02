@@ -20,17 +20,21 @@
 package com.tightvnc.vncviewer;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.io.*;
 
 //
 // VncCanvas2 is a special version of VncCanvas which may use Java 2 API.
 //
 
-class VncCanvas2 extends VncCanvas {
+class VncCanvas2 extends VncCanvas implements MouseWheelListener {
 
   public VncCanvas2(VncViewer v) throws IOException {
     super(v);
     disableFocusTraversalKeys();
+    addMouseWheelListener(this);
   }
 
   public VncCanvas2(VncViewer v, int maxWidth_, int maxHeight_)
@@ -38,6 +42,21 @@ class VncCanvas2 extends VncCanvas {
 
     super(v, maxWidth_, maxHeight_);
     disableFocusTraversalKeys();
+    addMouseWheelListener(this);
+  }
+
+  public void mouseWheelMoved(MouseWheelEvent e) {
+    if (viewer.rfb != null && rfb.inNormalProtocol) {
+      if (inputEnabled) {
+        try {
+          synchronized (rfb) {
+            rfb.writePointerEvent((MouseEvent)e, true, true, e.getWheelRotation());
+            rfb.writePointerEvent((MouseEvent)e, false, true, e.getWheelRotation());
+          }
+        } catch (IOException ex) {}
+      }
+    }
+
   }
 
   public void paintScaledFrameBuffer(Graphics g) {
@@ -62,4 +81,5 @@ class VncCanvas2 extends VncCanvas {
   }
 
 }
+
 

@@ -1027,10 +1027,23 @@ class RfbProto {
   int pointerMask = 0;
 
   void writePointerEvent(MouseEvent evt) throws IOException {
+    writePointerEvent(evt, false);
+  }
+
+  void writePointerEvent(MouseEvent evt, boolean down) throws IOException {
+    writePointerEvent(evt, down, false, 0);
+  }
+
+  void writePointerEvent(MouseEvent evt, boolean down,
+                         boolean wheelEvent,
+                         int wheelRotation) throws IOException {
     int modifiers = evt.getModifiers();
 
     int mask2 = 2;
     int mask3 = 4;
+    int mask4 = 8;
+    int mask5 = 16;
+
     if (viewer.options.reverseMouseButtons2And3) {
       mask2 = 4;
       mask3 = 2;
@@ -1040,22 +1053,41 @@ class RfbProto {
     // button presses. Here we think that it was the left button if
     // modifiers do not include BUTTON2_MASK or BUTTON3_MASK.
 
-    if (evt.getID() == MouseEvent.MOUSE_PRESSED) {
-      if ((modifiers & InputEvent.BUTTON2_MASK) != 0) {
-        pointerMask = mask2;
-        modifiers &= ~ALT_MASK;
-      } else if ((modifiers & InputEvent.BUTTON3_MASK) != 0) {
-        pointerMask = mask3;
-        modifiers &= ~META_MASK;
+    if (wheelEvent) {
+      if (down) {
+        if (wheelRotation < 0) {
+          pointerMask = mask4;
+          modifiers &= ~ALT_MASK;
+        } else {
+          pointerMask = mask5;
+          modifiers &= ~META_MASK;
+        }
       } else {
-        pointerMask = 1;
+        pointerMask = 0;
+        if (wheelRotation < 0) {
+          modifiers &= ~ALT_MASK;
+        } else {
+          modifiers &= ~META_MASK;
+        }
       }
-    } else if (evt.getID() == MouseEvent.MOUSE_RELEASED) {
-      pointerMask = 0;
-      if ((modifiers & InputEvent.BUTTON2_MASK) != 0) {
-        modifiers &= ~ALT_MASK;
-      } else if ((modifiers & InputEvent.BUTTON3_MASK) != 0) {
-        modifiers &= ~META_MASK;
+    } else {
+      if (evt.getID() == MouseEvent.MOUSE_PRESSED) {
+        if ((modifiers & InputEvent.BUTTON2_MASK) != 0) {
+          pointerMask = mask2;
+          modifiers &= ~ALT_MASK;
+        } else if ((modifiers & InputEvent.BUTTON3_MASK) != 0) {
+          pointerMask = mask3;
+          modifiers &= ~META_MASK;
+        } else {
+          pointerMask = 1;
+        }
+      } else if (evt.getID() == MouseEvent.MOUSE_RELEASED) {
+        pointerMask = 0;
+        if ((modifiers & InputEvent.BUTTON2_MASK) != 0) {
+          modifiers &= ~ALT_MASK;
+        } else if ((modifiers & InputEvent.BUTTON3_MASK) != 0) {
+          modifiers &= ~META_MASK;
+        }
       }
     }
 

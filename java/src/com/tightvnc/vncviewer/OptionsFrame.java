@@ -202,7 +202,7 @@ class OptionsFrame extends Frame
   //
   
   void setScalingFactor(int sf) {
-      setScalingFactor(((Integer)sf).toString());
+    setScalingFactor(new Integer(sf).toString());
   }
   
   void setScalingFactor(String s) {
