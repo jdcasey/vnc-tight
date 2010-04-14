@@ -778,7 +778,7 @@ class VncCanvas extends Canvas
 
   private synchronized void trySendPointerEvent() {
     if ((needToSendMouseEvent) && (mouseEvent!=null)) {
-      sendMouseEvent(mouseEvent, false);
+      sendMouseEvent(mouseEvent);
       needToSendMouseEvent = false;
       lastMouseEventSendTime = System.currentTimeMillis();
     }
@@ -847,8 +847,9 @@ class VncCanvas extends Canvas
           // Else, it's mouse movement - we can send it in
           // our thread later.
           if (!moved) {
-            sendMouseEvent(evt, moved);
+            sendMouseEvent(evt);
           } else {
+            softCursorMove(evt.getX(), evt.getY());
             mouseEvent = evt;
             needToSendMouseEvent = true;
           }
@@ -859,10 +860,7 @@ class VncCanvas extends Canvas
     }
   }
 
-  private void sendMouseEvent(MouseEvent evt, boolean moved) {
-    if (moved) {
-      softCursorMove(evt.getX(), evt.getY());
-    }
+  private void sendMouseEvent(MouseEvent evt) {
     if (rfb.framebufferWidth != scaledWidth) {
       int sx = (evt.getX() * 100 + scalingFactor/2) / scalingFactor;
       int sy = (evt.getY() * 100 + scalingFactor/2) / scalingFactor;
