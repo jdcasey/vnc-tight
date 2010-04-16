@@ -26,7 +26,10 @@ public class SshPasswordDialog extends javax.swing.JDialog {
                              String promptText) {
         super(parent, modal);
         initComponents();
-        promptLabel.setText(promptText);
+        if (promptText != null) {
+          promptLabel.setText(promptText);
+        }
+        setLocationRelativeTo(null);
     }
 
     /** @return the return status of this dialog - one of RET_OK or RET_CANCEL */
@@ -53,9 +56,7 @@ public class SshPasswordDialog extends javax.swing.JDialog {
     okButton = new javax.swing.JButton();
     cancelButton = new javax.swing.JButton();
 
-    setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     setTitle("SSH Password");
-    setLocationByPlatform(true);
     addWindowListener(new java.awt.event.WindowAdapter() {
       public void windowClosing(java.awt.event.WindowEvent evt) {
         closeDialog(evt);

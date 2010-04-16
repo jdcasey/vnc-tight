@@ -25,6 +25,7 @@ public class SshUserNameDialog extends javax.swing.JDialog {
     public SshUserNameDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     /** @return the return status of this dialog - one of RET_OK or RET_CANCEL */
@@ -51,9 +52,7 @@ public class SshUserNameDialog extends javax.swing.JDialog {
     cancelButton = new javax.swing.JButton();
     userNameField = new javax.swing.JTextField();
 
-    setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     setTitle("SSH User Name");
-    setLocationByPlatform(true);
     addWindowListener(new java.awt.event.WindowAdapter() {
       public void windowClosing(java.awt.event.WindowEvent evt) {
         closeDialog(evt);
@@ -100,7 +99,7 @@ public class SshUserNameDialog extends javax.swing.JDialog {
             .addComponent(cancelButton))
           .addGroup(layout.createSequentialGroup()
             .addGap(10, 10, 10)
-            .addComponent(promptLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(promptLabel))
           .addGroup(layout.createSequentialGroup()
             .addContainerGap()
             .addComponent(userNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)))
