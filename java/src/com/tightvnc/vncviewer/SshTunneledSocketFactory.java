@@ -126,13 +126,15 @@ class SshTunneledSocketFactory implements SocketFactory {
     }
 
     public boolean promptPassword(String message) {
-      JTextField passwordField = (JTextField) new JPasswordField(20);
-      Object[] ob = {passwordField};
-      int result =
-              JOptionPane.showConfirmDialog(null, ob, "SSH: " + message,
-                                            JOptionPane.OK_CANCEL_OPTION);
-      if (result == JOptionPane.OK_OPTION) {
-        passwd = passwordField.getText();
+      SshPasswordDialog dialog = new SshPasswordDialog(null, true, message + ":");
+      dialog.setVisible(true);
+
+      int result = dialog.getReturnStatus();
+
+      if (result == SshPasswordDialog.RET_OK) {
+        char[] passwdChars = dialog.getPassword();
+        passwd = new String(passwdChars);
+        java.util.Arrays.fill(passwdChars, '\0');
         return true;
       } else {
         return false;
