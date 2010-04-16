@@ -52,6 +52,7 @@ class SshTunneledSocketFactory implements SocketFactory {
     if (localPort == 0) {
       if (sshHost == null) {
         sshHost = System.getProperty("user.name") + "@" + host;
+        System.out.println("SSH host not specified, assuming " + sshHost);
       }
       System.out.println("Creating SSH tunnel to " + sshHost);
       createTunnel(host, port, sshHost);
@@ -66,8 +67,24 @@ class SshTunneledSocketFactory implements SocketFactory {
     try {
       JSch jsch = new JSch();
 
-      String user = sshHost.substring(0, sshHost.indexOf('@'));
-      sshHost = sshHost.substring(sshHost.indexOf('@') + 1);
+      final int atIndex = sshHost.indexOf('@');
+      String user = "";
+      if (atIndex > 0) {
+        user = sshHost.substring(0, atIndex);
+      } else {
+        SshUserNameDialog dialog = new SshUserNameDialog(null, true);
+        dialog.setVisible(true);
+        int result = dialog.getReturnStatus();
+
+        if (result == SshUserNameDialog.RET_OK) {
+          user = dialog.getUserName();
+        } else {
+          throw new IOException("SSH connection cancelled");
+        }
+      }
+
+      // This should work correctly even if (atIndex == -1).
+      sshHost = sshHost.substring(atIndex + 1);
 
       Session session = jsch.getSession(user, sshHost, 22);
 
