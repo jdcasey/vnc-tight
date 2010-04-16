@@ -116,8 +116,6 @@ class SshTunneledSocketFactory implements SocketFactory {
                                              null, options, options[0]);
       return foo == 0;
     }
-    String passwd;
-    JTextField passwordField = (JTextField) new JPasswordField(20);
 
     public String getPassphrase() {
       return null;
@@ -128,6 +126,7 @@ class SshTunneledSocketFactory implements SocketFactory {
     }
 
     public boolean promptPassword(String message) {
+      JTextField passwordField = (JTextField) new JPasswordField(20);
       Object[] ob = {passwordField};
       int result =
               JOptionPane.showConfirmDialog(null, ob, "SSH: " + message,
@@ -143,20 +142,20 @@ class SshTunneledSocketFactory implements SocketFactory {
     public void showMessage(String message) {
       JOptionPane.showMessageDialog(null, message);
     }
-    final GridBagConstraints gbc =
-            new GridBagConstraints(0, 0, 1, 1, 1, 1,
-                                   GridBagConstraints.NORTHWEST,
-                                   GridBagConstraints.NONE,
-                                   new Insets(0, 0, 0, 0), 0, 0);
-    private Container panel;
 
     public String[] promptKeyboardInteractive(String destination,
                                               String name,
                                               String instruction,
                                               String[] prompt,
                                               boolean[] echo) {
-      panel = new JPanel();
+      Container panel = new JPanel();
       panel.setLayout(new GridBagLayout());
+
+      final GridBagConstraints gbc =
+              new GridBagConstraints(0, 0, 1, 1, 1, 1,
+                                     GridBagConstraints.NORTHWEST,
+                                     GridBagConstraints.NONE,
+                                     new Insets(0, 0, 0, 0), 0, 0);
 
       gbc.weightx = 1.0;
       gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -199,6 +198,8 @@ class SshTunneledSocketFactory implements SocketFactory {
         return null;  // cancel
       }
     }
+
+    private String passwd;
   }
 }
 
