@@ -36,9 +36,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.io.*;
-import java.lang.*;
-import java.util.zip.*;
-
 
 //
 // VncCanvas is a subclass of Canvas which draws a VNC desktop on it.
