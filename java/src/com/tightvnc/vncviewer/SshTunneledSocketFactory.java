@@ -55,7 +55,13 @@ class SshTunneledSocketFactory implements SocketFactory {
         System.out.println("SSH host not specified, assuming " + sshHost);
       }
       System.out.println("Creating SSH tunnel to " + sshHost);
-      createTunnel(host, port, sshHost);
+      try {
+        createTunnel(host, port, sshHost);
+      } catch (IOException e) {
+        throw e;
+      } catch (Exception e) {
+        throw new IOException("Could not create SSH tunnel; cause: " + e.getMessage());
+      }
       System.out.println("Local port for the SSH tunnel is " + localPort);
     }
 
@@ -63,7 +69,7 @@ class SshTunneledSocketFactory implements SocketFactory {
   }
 
   private void createTunnel(String host, int port,
-                            String sshHost) throws IOException {
+                            String sshHost) throws Exception {
     try {
       JSch jsch = new JSch();
 
@@ -72,15 +78,7 @@ class SshTunneledSocketFactory implements SocketFactory {
       if (atIndex > 0) {
         user = sshHost.substring(0, atIndex);
       } else {
-        SshUserNameDialog dialog = new SshUserNameDialog(null, true);
-        dialog.setVisible(true);
-        int result = dialog.getReturnStatus();
-
-        if (result == SshUserNameDialog.RET_OK) {
-          user = dialog.getUserName();
-        } else {
-          throw new IOException("SSH connection cancelled");
-        }
+        user = new UserNameRequester().queryUserName();
       }
 
       // This should work correctly even if (atIndex == -1).
