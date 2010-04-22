@@ -37,11 +37,13 @@ public class SshUserNameRequester {
   public String queryUserName() throws Exception {
     if (SwingUtilities.isEventDispatchThread()) {
       new DialogRunner().run();
-      return user;
     } else { // not in the event dispatch thread
       SwingUtilities.invokeAndWait(new DialogRunner());
-      return user;
     }
+    if (user == null) {
+      throw new Exception("No user name entered for SSH authentication");
+    }
+    return user;
   }
 
   /**

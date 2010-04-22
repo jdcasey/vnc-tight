@@ -49,6 +49,9 @@ public class SshPasswordRequester {
     } else { // not in the event dispatch thread
       SwingUtilities.invokeAndWait(new DialogRunner());
     }
+    if (password == null) {
+      throw new Exception("No user name entered for SSH authentication");
+    }
     char[] localReference = password;
     password = null;
     return localReference;
