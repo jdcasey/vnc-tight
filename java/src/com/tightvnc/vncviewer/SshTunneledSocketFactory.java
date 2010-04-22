@@ -141,17 +141,13 @@ class SshTunneledSocketFactory implements SocketFactory {
     }
 
     public boolean promptPassword(String message) {
-      SshPasswordDialog dialog = new SshPasswordDialog(null, true, message + ":");
-      dialog.setVisible(true);
-
-      int result = dialog.getReturnStatus();
-
-      if (result == SshPasswordDialog.RET_OK) {
-        char[] passwdChars = dialog.getPassword();
+      SshPasswordRequester requester = new SshPasswordRequester(message + ":");
+      try {
+        char[] passwdChars = requester.queryPassword();
         passwd = new String(passwdChars);
         java.util.Arrays.fill(passwdChars, '\0');
         return true;
-      } else {
+      } catch (Exception e) {
         return false;
       }
     }
