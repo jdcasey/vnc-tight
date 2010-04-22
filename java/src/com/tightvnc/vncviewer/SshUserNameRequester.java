@@ -27,7 +27,7 @@ import javax.swing.SwingUtilities;
  *
  * @author const
  */
-public class UserNameRequester {
+public class SshUserNameRequester {
 
   /**
    * Query SSH user name.

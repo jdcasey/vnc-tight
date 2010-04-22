@@ -78,7 +78,7 @@ class SshTunneledSocketFactory implements SocketFactory {
       if (atIndex > 0) {
         user = sshHost.substring(0, atIndex);
       } else {
-        user = new UserNameRequester().queryUserName();
+        user = new SshUserNameRequester().queryUserName();
       }
 
       // This should work correctly even if (atIndex == -1).
