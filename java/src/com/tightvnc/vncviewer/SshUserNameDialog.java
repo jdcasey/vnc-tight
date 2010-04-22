@@ -1,13 +1,21 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * SshPasswordDialog.java
- *
- * Created on 16.04.2010, 14:04:30
- */
+//
+//  Copyright (C) 2010 GlavSoft, LLC.  All Rights Reserved.
+//
+//  This is free software; you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation; either version 2 of the License, or
+//  (at your option) any later version.
+//
+//  This software is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this software; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307,
+//  USA.
+//
 
 package com.tightvnc.vncviewer;
 
@@ -21,7 +29,7 @@ public class SshUserNameDialog extends javax.swing.JDialog {
     /** A return status code - returned if OK button has been pressed */
     public static final int RET_OK = 1;
 
-    /** Creates new form SshPasswordDialog */
+    /** Creates new form SshUserNameDialog */
     public SshUserNameDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();

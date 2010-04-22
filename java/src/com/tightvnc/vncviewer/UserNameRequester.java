@@ -46,7 +46,7 @@ public class UserNameRequester {
 
   /**
    * Private inner class to implement a Runnable object to be executed in the
-   * event* dispatch thread.
+   * event dispatch thread.
    */
   private class DialogRunner implements Runnable {
     public void run() {
