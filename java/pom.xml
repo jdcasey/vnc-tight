@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
+  </parent>
+  
+  <groupId>org.commonjava.apps</groupId>
+  <artifactId>vnc-imp</artifactId>
+  <version>1.6-SNAPSHOT</version>
+  
+  <name>VNC Imp</name>
+  <description>Fork of TightVNC Java Viewer to provide better SSH features and more</description>
+  
+  <licenses>
+    <license>
+      <name>GNU Public License v3</name>
+      <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>Original TightVNC Java Viewer was GPLv2</comments>
+    </license>
+  </licenses>
+  
+  <scm>
+    <connection>scm:git:http://jdcasey@github.com/jdcasey/vnc-tight.git</connection>
+    <developerConnection>scm:git:git@github.com:jdcasey/vnc-tight.git</developerConnection>
+    <url>http://github.com/jdcasey/vnc-tight</url>
+  </scm>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.3</version>
+          <executions>
+            <execution>
+              <id>self-contained-jar</id>
+              <goals>
+                <goal>single</goal>
+              </goals>
+              <phase>package</phase>
+              <configuration>
+                <descriptorRefs>
+                  <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+                <classifier>bin</classifier>
+                <archive>
+                  <manifest>
+                    <mainClass>com.tightvnc.vncviewer.VncViewer</mainClass>
+                  </manifest>
+                </archive>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3.2</version>
+          <configuration>
+            <source>1.6</source>
+            <target>1.6</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.10</version>
+          <configuration>
+            <excludes>
+              <exclude>**/fixture/*.java</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-war-plugin</artifactId>
+          <version>2.1.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.2.1</version>
+          <configuration>
+            <autoVersionSubmodules>true</autoVersionSubmodules>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.8</version>
+          <configuration>
+            <detectOfflineLinks>false</detectOfflineLinks>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.commonjava.sshwrap</groupId>
+      <artifactId>sshwrap</artifactId>
+      <version>0.3-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+</project>
