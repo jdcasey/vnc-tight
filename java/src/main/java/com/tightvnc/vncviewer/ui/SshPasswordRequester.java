@@ -17,9 +17,10 @@
 //  USA.
 //
 
-package com.tightvnc.vncviewer;
+package com.tightvnc.vncviewer.ui;
 
 import javax.swing.SwingUtilities;
+
 
 /**
  * This class requests a password for SSH authentication using JDialog which

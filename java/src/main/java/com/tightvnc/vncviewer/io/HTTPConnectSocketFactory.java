@@ -23,7 +23,7 @@
 // HTTP proxies supporting the HTTP CONNECT method.
 //
 
-package com.tightvnc.vncviewer;
+package com.tightvnc.vncviewer.io;
 
 import java.applet.*;
 import java.net.*;

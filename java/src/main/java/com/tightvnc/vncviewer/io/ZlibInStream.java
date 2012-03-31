@@ -20,7 +20,7 @@
 // A ZlibInStream reads from a zlib.io.InputStream
 //
 
-package com.tightvnc.vncviewer;
+package com.tightvnc.vncviewer.io;
 
 public class ZlibInStream extends InStream {
 

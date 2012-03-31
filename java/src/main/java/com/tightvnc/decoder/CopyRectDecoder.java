@@ -1,6 +1,7 @@
 package com.tightvnc.decoder;
 
-import com.tightvnc.vncviewer.RfbInputStream;
+import com.tightvnc.vncviewer.io.RfbInputStream;
+
 import java.awt.Graphics;
 import java.io.IOException;
 

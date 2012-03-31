@@ -10,7 +10,7 @@ import java.awt.image.MemoryImageSource;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import com.tightvnc.vncviewer.RfbInputStream;
+import com.tightvnc.vncviewer.io.RfbInputStream;
 
 //
 // This is base decoder class.

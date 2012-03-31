@@ -1,10 +1,12 @@
 package com.tightvnc.decoder;
 
-import com.tightvnc.vncviewer.InStream;
-import com.tightvnc.vncviewer.RfbInputStream;
-import com.tightvnc.vncviewer.ZlibInStream;
 import java.awt.Graphics;
-import com.tightvnc.vncviewer.MemInStream;
+
+import com.tightvnc.vncviewer.io.InStream;
+import com.tightvnc.vncviewer.io.MemInStream;
+import com.tightvnc.vncviewer.io.RfbInputStream;
+import com.tightvnc.vncviewer.io.ZlibInStream;
+
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.image.MemoryImageSource;

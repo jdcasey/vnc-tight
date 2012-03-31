@@ -24,9 +24,12 @@
 // HTTP proxies supporting the HTTP CONNECT method.
 //
 
-package com.tightvnc.vncviewer;
+package com.tightvnc.vncviewer.io;
 
 import com.jcraft.jsch.*;
+import com.tightvnc.vncviewer.ui.SshPasswordRequester;
+import com.tightvnc.vncviewer.ui.SshUserNameRequester;
+
 import java.applet.*;
 import java.awt.*;
 import java.net.*;

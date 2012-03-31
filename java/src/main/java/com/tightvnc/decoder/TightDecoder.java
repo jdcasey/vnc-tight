@@ -1,7 +1,8 @@
 package com.tightvnc.decoder;
 
 import com.tightvnc.decoder.common.Repaintable;
-import com.tightvnc.vncviewer.RfbInputStream;
+import com.tightvnc.vncviewer.io.RfbInputStream;
+
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Image;

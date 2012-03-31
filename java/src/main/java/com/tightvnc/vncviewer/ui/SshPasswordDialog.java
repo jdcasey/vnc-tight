@@ -17,7 +17,7 @@
 //  USA.
 //
 
-package com.tightvnc.vncviewer;
+package com.tightvnc.vncviewer.ui;
 
 /**
  *
